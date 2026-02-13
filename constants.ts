@@ -99,5 +99,11 @@ Ensure lighting accuracy for each setup: correct shadow placement, contrast, and
 The overall presentation should feel cinematic, professional, and educational — suitable for a photography or filmmaking masterclass.
 Neutral background, consistent color grading, sharp focus, no stylistic distortion.
 Avoid over-processing or artificial effects.`
+  },
+  {
+    id: 'make-me-thin',
+    label: 'MAKE ME THIN',
+    description: 'Subtle anatomical refinement for a slimmer appearance.',
+    prompt: 'Retake this image and make the person in it look slim'
   }
 ];
