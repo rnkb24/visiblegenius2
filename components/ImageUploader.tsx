@@ -78,7 +78,6 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageSelected, i
         disabled={isLoading}
       />
 
-      {/* Geometric Decorative Elements */}
       <div className="absolute top-4 left-4 w-3 h-3 bg-black"></div>
       <div className="absolute top-4 right-4 w-3 h-3 bg-black rounded-full"></div>
       <div className="absolute bottom-4 left-4 w-0 h-0 border-l-[6px] border-l-transparent border-b-[12px] border-b-black border-r-[6px] border-r-transparent"></div>

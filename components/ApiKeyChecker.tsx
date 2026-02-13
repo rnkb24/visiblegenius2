@@ -68,7 +68,6 @@ export const ApiKeyChecker: React.FC<ApiKeyCheckerProps> = ({ onReady }) => {
 
   return (
     <div className="flex flex-col items-center justify-center p-12 text-center space-y-8 bg-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] max-w-md mx-auto mt-20 relative">
-      {/* Decorative Geometric Header */}
       <div className="absolute -top-6 -left-6 w-12 h-12 bg-[#F0C020] border-4 border-black"></div>
       <div className="absolute -bottom-6 -right-6 w-12 h-12 rounded-full bg-[#D02020] border-4 border-black"></div>
 
