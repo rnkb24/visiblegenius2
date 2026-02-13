@@ -8,13 +8,13 @@ export const STYLE_PRESETS: StylePreset[] = [
   {
     id: 'architectural',
     label: 'Architectural Genius',
-    description: 'Realistic, high-end European architectural photography.',
+    description: 'UPLOAD A RENDERING TO PROCESS IT AS A REAL PHOTO.',
     prompt: `Render the image in a realistic contemporary architectural photography style with an eye-level viewpoint. Keep the architecture, urban context, paving, trees, benches, and surrounding buildings exactly the same as the original image, with no changes to layout, proportions, or composition. Use hard daylight lighting, allowing shadows. Materials should appear realistic and understated - metal mesh, glass, stone paving, and concrete - without overtly added textures or stylization. Include minimal human presence with slight motion blur to suggest everyday activity. Add dramatic late afternoon lighting, with cinematic effects, and slight saturation. The final image should feel calm, documentary, and architecturally precise, like a professional European architectural photograph of a built project. Shot on Kodak Kodachrome.`
   },
   {
     id: 'cinematic-sheet',
     label: 'Cinematic Contact Sheet',
-    description: 'A 9-panel cinematic breakdown covering wide, medium, and close-up angles.',
+    description: 'UPLOAD YOUR PHOTO FOR A 9-PANEL CONTACT SHEET FROM DIFFERENT ANGLES.',
     prompt: `Examine the input image and identify every main subject (person, group, vehicle, object) and how they relate within the scene.
 
 Create a unified 3x3 "Cinematic Contact Sheet" that shows these exact subjects in the same environment across 9 distinct shot types.
@@ -43,13 +43,19 @@ The final output is a 9-panel cinematic storyboard that covers wide context, mid
   {
     id: 'luxury-fashion',
     label: 'Luxury Fashion Shoot',
-    description: 'Timeless, bold, and intimate medium-format aesthetic.',
+    description: 'UPLOAD A PHOTO TO TRANSFORM INTO A BOLD LUXURY FASHION EDIT.',
     prompt: `shot on medium-format film look, fashion magazine aesthetic, timeless, bold, intimate, confrontational.`
+  },
+  {
+    id: 'lego-it',
+    label: 'LEGO IT',
+    description: 'UPLOAD ANY IMAGE TO RECONSTRUCT IT ENTIRELY OUT OF LEGO BRICKS.',
+    prompt: `Convert this image into a Lego world, everything is made out of lego. Try to respect the general theme of the image. Render as a high-detail physical Lego set with plastic textures and studs visible. Maintain original composition and lighting. Sharp focus, vibrant colors, toy photography style.`
   },
   {
     id: 'story-sequence',
     label: 'STORY SEQUENCE GRID',
-    description: 'Sequential 9-panel narrative imagining what happens next.',
+    description: 'UPLOAD A MOMENT TO GENERATE A 9-PANEL NARRATIVE SEQUENCE.',
     prompt: `Analyze the input image and identify the main subjects, their actions, the environment, and the implied narrative or moment in time.
 
 Create a unified 3x3 " Sequence Grid" that imagines what happens NEXT in this story across 9 sequential scenes. Each panel should show a progression in time, not different camera angles.
@@ -78,7 +84,7 @@ The final output is a 9-panel sequential story grid that tells a visual narrativ
   {
     id: 'lighting-styles',
     label: 'LIGHTING STYLES',
-    description: 'Professional 9-panel lighting study.',
+    description: 'UPLOAD A PORTRAIT TO STUDY IT ACROSS 9 PROFESSIONAL STUDIO LIGHTING SETUPS.',
     prompt: `Create a clean 3x3 grid layout showcasing nine professional lighting setups applied to the same male portrait.
 Use the provided portrait as the base image. Keep the same camera angle, framing, facial expression, and background across all nine images.
 Each square should demonstrate a different lighting style, clearly distinct in mood and technique.
@@ -103,7 +109,7 @@ Avoid over-processing or artificial effects.`
   {
     id: 'make-me-thin',
     label: 'MAKE ME THIN',
-    description: 'Subtle anatomical refinement for a slimmer appearance.',
+    description: 'UPLOAD A FULL BODY PHOTO FOR SUBTLE ANATOMICAL REFINEMENT.',
     prompt: 'Retake this image and make the person in it look slim'
   }
 ];

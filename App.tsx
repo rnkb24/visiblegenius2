@@ -156,7 +156,7 @@ const App: React.FC = () => {
                     
                     <div className="flex items-center gap-4">
                         <div className="px-3 py-1 md:px-4 md:py-2 border-2 border-black bg-black text-white font-mono text-[10px] md:text-xs uppercase tracking-widest font-bold shadow-[4px_4px_0px_0px_#F0C020]">
-                            System Ready
+                            SYSTEM READY
                         </div>
                         <button 
                           onClick={handleLock}
@@ -172,13 +172,13 @@ const App: React.FC = () => {
 
               <main className="flex-grow flex flex-col items-center px-6 py-8 w-full max-w-7xl mx-auto relative">
                 {status === AppStatus.IDLE && !previewImage && (
-                  <div className="w-full flex flex-col items-center space-y-8 md:space-y-12 animate-fade-in-up max-w-4xl z-10">
+                  <div className="w-full flex flex-col items-center space-y-8 md:space-y-12 animate-fade-in-up max-w-7xl z-10">
                     <div className="text-center">
                         <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight mb-2">Form follows Function</h2>
                         <p className="text-neutral-500 max-w-md mx-auto uppercase text-[10px] md:text-xs font-bold tracking-[0.2em]">upload photo and select formula</p>
                     </div>
                     
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 w-full">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 w-full items-start">
                         <div className="lg:col-span-7">
                             <ImageUploader onImageSelected={handleImageSelect} isLoading={false} />
                         </div>
@@ -203,8 +203,8 @@ const App: React.FC = () => {
                                     ))}
                                 </ul>
                             </div>
-                            <div className="mt-2 text-[10px] font-mono text-neutral-400 uppercase tracking-tighter">
-                                // System detected ratio sync enabled
+                            <div className="mt-2 text-[10px] font-mono text-neutral-400 uppercase tracking-tighter text-right">
+                                // SYSTEM DETECTED RATIO SYNC ENABLED
                             </div>
                         </div>
                     </div>
@@ -310,7 +310,7 @@ const App: React.FC = () => {
               </main>
               
               <footer className="w-full py-8 text-center text-black font-bold uppercase tracking-widest text-[10px] border-t-4 border-black bg-white">
-                <p>ENGINEERED BY RON RADOM // VISIBLE GENIUS v0.4</p>
+                <p>ENGINEERED BY RON RADOM // VISIBLE GENIUS v0.6</p>
               </footer>
             </div>
           )}
