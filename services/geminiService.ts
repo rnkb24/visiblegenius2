@@ -1,14 +1,15 @@
-import { GoogleGenAI, HarmCategory, HarmBlockThreshold } from "@google/genai";
+import { GoogleGenAI } from "@google/genai";
 import { MODEL_NAME } from "../constants";
 
 export const generateTransmutedImage = async (
   base64Image: string,
   secretPrompt: string
 ): Promise<string> => {
-  // CRITICAL: Create a new instance right before the call to ensure fresh API key
+  // Always create a fresh instance to ensure the latest API key is used
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
   try {
+    // Standardizing contents to the object-based format preferred by the image generation preview
     const response = await ai.models.generateContent({
       model: MODEL_NAME,
       contents: {
@@ -29,51 +30,16 @@ export const generateTransmutedImage = async (
           imageSize: "2K",
           aspectRatio: "4:3",
         },
-        safetySettings: [
-          {
-            category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-            threshold: HarmBlockThreshold.BLOCK_NONE,
-          },
-          {
-            category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-            threshold: HarmBlockThreshold.BLOCK_NONE,
-          },
-          {
-            category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
-            threshold: HarmBlockThreshold.BLOCK_NONE,
-          },
-          {
-            category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
-            threshold: HarmBlockThreshold.BLOCK_NONE,
-          },
-          {
-            category: HarmCategory.HARM_CATEGORY_CIVIC_INTEGRITY,
-            threshold: HarmBlockThreshold.BLOCK_NONE,
-          },
-        ],
+        // Safety settings removed to minimize request parameters and avoid potential argument conflicts
       },
     });
 
-    const candidates = response.candidates;
-    if (!candidates || candidates.length === 0) {
-      throw new Error("No candidates returned from Gemini.");
-    }
-
-    const candidate = candidates[0];
-
-    if (!candidate.content) {
-      if (candidate.finishReason) {
-        throw new Error(`Model stopped generation. Reason: ${candidate.finishReason}`);
-      }
-      throw new Error("No content returned from Gemini.");
+    const candidate = response.candidates?.[0];
+    if (!candidate || !candidate.content) {
+      throw new Error("No output generated. The request may have been blocked or failed to process.");
     }
 
     const parts = candidate.content.parts;
-    
-    if (!parts || !Array.isArray(parts)) {
-      throw new Error("Response content is missing valid parts.");
-    }
-
     let foundImageUrl: string | null = null;
 
     for (const part of parts) {
@@ -85,17 +51,22 @@ export const generateTransmutedImage = async (
     }
 
     if (!foundImageUrl) {
+      // If no image, check if there's text feedback
       const textPart = parts.find(p => p.text);
       if (textPart?.text) {
-        throw new Error(`Generation failed: ${textPart.text}`);
+        throw new Error(`Model Response: ${textPart.text}`);
       }
-      throw new Error("No image data found in the response.");
+      throw new Error("Transmutation failed: No image data was returned by the engine.");
     }
 
     return foundImageUrl;
 
-  } catch (error) {
-    console.error("Gemini Image Generation Error:", error);
+  } catch (error: any) {
+    console.error("Critical Engine Error:", error);
+    // Log the full structure for debugging if it happens again
+    if (error.response) {
+      console.error("API Error Payload:", JSON.stringify(error.response, null, 2));
+    }
     throw error;
   }
 };

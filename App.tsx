@@ -161,13 +161,13 @@ const App: React.FC = () => {
                 </div>
               </header>
 
-              <main className="flex-grow flex flex-col items-center px-6 py-12 w-full max-w-7xl mx-auto relative">
+              <main className="flex-grow flex flex-col items-center px-6 py-8 w-full max-w-7xl mx-auto relative">
                 <div className="absolute inset-0 pointer-events-none opacity-5 border-l border-r border-black mx-auto w-full max-w-5xl"></div>
                 
                 {status === AppStatus.IDLE && !previewImage && (
-                  <div className="w-full flex flex-col items-center space-y-6 md:space-y-8 animate-fade-in-up max-w-2xl z-10">
-                    <div className="text-center space-y-1 md:space-y-2">
-                        <h2 className="text-2xl font-black uppercase tracking-tight">Form follows Function</h2>
+                  <div className="w-full flex flex-col items-center space-y-4 md:space-y-6 animate-fade-in-up max-w-2xl z-10">
+                    <div className="text-center">
+                        <h2 className="text-2xl font-black uppercase tracking-tight mb-1">Form follows Function</h2>
                         <p className="text-neutral-500 max-w-md mx-auto uppercase text-[10px] md:text-xs font-bold tracking-widest">upload photo and select formula</p>
                     </div>
                     <ImageUploader onImageSelected={handleImageSelect} isLoading={false} />
@@ -241,7 +241,7 @@ const App: React.FC = () => {
                 )}
 
                 {status === AppStatus.PROCESSING && (
-                  <div className="flex flex-col items-center justify-center py-20 space-y-10">
+                  <div className="flex flex-col items-center justify-center py-16 space-y-10">
                      <div className="relative w-24 h-24 md:w-32 md:h-32">
                         <div className="absolute inset-0 border-8 border-black animate-spin"></div>
                         <div className="absolute inset-0 border-8 border-t-[#D02020] border-r-[#F0C020] border-b-[#1040A0] border-l-transparent animate-spin" style={{ animationDirection: 'reverse', animationDuration: '2s' }}></div>
