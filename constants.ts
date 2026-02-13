@@ -47,15 +47,57 @@ The final output is a 9-panel cinematic storyboard that covers wide context, mid
     prompt: `shot on medium-format film look, fashion magazine aesthetic, timeless, bold, intimate, confrontational.`
   },
   {
-    id: 'watercolor',
-    label: 'Ethereal Watercolor',
-    description: 'Soft, artistic, painterly watercolor style.',
-    prompt: `Convert this image into a beautiful, high-quality watercolor painting. Use soft, bleeding edges, pastel colors, and visible paper texture. The lighting should be diffuse and gentle. Reduce strict details in favor of artistic impressions and washes of color. The composition remains the same, but the reality is interpreted through an artist's brush. White space and loose strokes should define the boundaries. The feeling is serene, artistic, and hand-crafted.`
+    id: 'story-sequence',
+    label: 'STORY SEQUENCE GRID',
+    description: 'Sequential 9-panel narrative imagining what happens next.',
+    prompt: `Analyze the input image and identify the main subjects, their actions, the environment, and the implied narrative or moment in time.
+
+Create a unified 3x3 " Sequence Grid" that imagines what happens NEXT in this story across 9 sequential scenes. Each panel should show a progression in time, not different camera angles.
+
+Keep the same characters, art style, and visual consistency throughout all panels.
+
+**Row 1 – Immediate Next Moments**
+1. **Scene 1:** The very next moment after the reference image (seconds later).
+2. **Scene 2:** A small action or reaction follows.
+3. **Scene 3:** The situation develops slightly.
+
+**Row 2 – Rising Action**
+4. **Scene 4:** Something changes or a new element is introduced.
+5. **Scene 5:** The characters respond or interact with the change.
+6. **Scene 6:** Tension or interest builds.
+
+**Row 3 – Climax & Resolution**
+7. **Scene 7:** A key moment or turning point.
+8. **Scene 8:** The aftermath or consequence.
+9. **Scene 9:** A concluding scene or new equilibrium.
+
+Maintain visual continuity: same characters (clothing, appearance), consistent environment, coherent lighting progression (if time passes), and unified art style.
+
+The final output is a 9-panel sequential story grid that tells a visual narrative continuing from the reference image, like frames from a graphic novel or film storyboard.`
   },
   {
-    id: 'clay',
-    label: 'Clay Render',
-    description: 'Clean, minimal, 3D soft-clay visualization.',
-    prompt: `Render this image as a 3D "clay render" style visualization. All surfaces should have a matte, soft-touch finish similar to unglazed ceramic or clay. Use a monochromatic or limited pastel color palette (soft whites, greys, peaches). The lighting should be studio-quality soft-box lighting with ambient occlusion to highlight shapes and volumes. Remove complex textures (like dirt, graffiti, or detailed material grains) and focus purely on geometry and form. The result should look like a clean, high-end architectural model.`
+    id: 'lighting-styles',
+    label: 'LIGHTING STYLES',
+    description: 'Professional 9-panel lighting study.',
+    prompt: `Create a clean 3x3 grid layout showcasing nine professional lighting setups applied to the same male portrait.
+Use the provided portrait as the base image. Keep the same camera angle, framing, facial expression, and background across all nine images.
+Each square should demonstrate a different lighting style, clearly distinct in mood and technique.
+Display the name of the lighting setup below each portrait using clean, readable typography.
+
+-Lighting styles to include:
+-Rembrandt Lighting
+-Split Lighting
+-Butterfly Lighting
+-Loop Lighting
+-Soft Natural Light
+-Hard Dramatic Light
+-Cinematic Side Light
+-High-Key Lighting
+-Low-Key Lighting
+
+Ensure lighting accuracy for each setup: correct shadow placement, contrast, and falloff.
+The overall presentation should feel cinematic, professional, and educational — suitable for a photography or filmmaking masterclass.
+Neutral background, consistent color grading, sharp focus, no stylistic distortion.
+Avoid over-processing or artificial effects.`
   }
 ];
