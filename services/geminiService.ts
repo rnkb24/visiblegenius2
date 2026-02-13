@@ -1,4 +1,4 @@
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenAI, HarmCategory, HarmBlockThreshold } from "@google/genai";
 import { MODEL_NAME } from "../constants";
 
 export const generateTransmutedImage = async (
@@ -31,6 +31,28 @@ export const generateTransmutedImage = async (
           imageSize: "2K", // Updated to 2K resolution
           aspectRatio: "4:3", // Updated to 4:3 aspect ratio
         },
+        safetySettings: [
+          {
+            category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+            threshold: HarmBlockThreshold.BLOCK_NONE,
+          },
+          {
+            category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+            threshold: HarmBlockThreshold.BLOCK_NONE,
+          },
+          {
+            category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+            threshold: HarmBlockThreshold.BLOCK_NONE,
+          },
+          {
+            category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+            threshold: HarmBlockThreshold.BLOCK_NONE,
+          },
+          {
+            category: HarmCategory.HARM_CATEGORY_CIVIC_INTEGRITY,
+            threshold: HarmBlockThreshold.BLOCK_NONE,
+          },
+        ],
       },
     });
 
@@ -41,7 +63,23 @@ export const generateTransmutedImage = async (
       throw new Error("No candidates returned from Gemini.");
     }
 
-    const parts = candidates[0].content.parts;
+    const candidate = candidates[0];
+
+    // Handle cases where content is blocked or empty (e.g. SAFETY)
+    if (!candidate.content) {
+      if (candidate.finishReason) {
+        throw new Error(`Model stopped generation. Reason: ${candidate.finishReason}`);
+      }
+      throw new Error("No content returned from Gemini.");
+    }
+
+    const parts = candidate.content.parts;
+    
+    // Validate parts existence before iterating
+    if (!parts || !Array.isArray(parts)) {
+      throw new Error("Response content is missing valid parts.");
+    }
+
     let foundImageUrl: string | null = null;
 
     for (const part of parts) {
@@ -53,6 +91,11 @@ export const generateTransmutedImage = async (
     }
 
     if (!foundImageUrl) {
+      // Check if there is a text part explaining the failure (e.g. "I cannot generate images of...")
+      const textPart = parts.find(p => p.text);
+      if (textPart?.text) {
+        throw new Error(`Generation failed: ${textPart.text}`);
+      }
       throw new Error("No image data found in the response.");
     }
 

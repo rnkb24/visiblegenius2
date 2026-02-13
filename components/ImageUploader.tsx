@@ -20,10 +20,6 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageSelected, i
       const reader = new FileReader();
       reader.onload = (e) => {
         const result = e.target?.result as string;
-        // Strip the data URL prefix to get raw base64 if needed, 
-        // but Gemini SDK usually handles raw base64. 
-        // The service logic strips or handles it. 
-        // We pass full data URL to parent for preview, parent/service cleans it for API.
         onImageSelected(result);
       };
       reader.readAsDataURL(file);
@@ -62,9 +58,10 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageSelected, i
 
   return (
     <div
-      className={`relative w-full max-w-xl mx-auto border-2 border-dashed rounded-2xl p-12 flex flex-col items-center justify-center transition-all duration-300 ease-in-out
-        ${dragActive ? 'border-indigo-400 bg-indigo-500/10 scale-[1.02]' : 'border-slate-700 bg-slate-900/50 hover:border-slate-500'}
-        ${isLoading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+      className={`relative w-full max-w-xl mx-auto p-12 flex flex-col items-center justify-center transition-all duration-200 ease-linear group
+        ${dragActive ? 'bg-[#F0C020] border-4 border-black border-dashed' : 'bg-white border-4 border-black border-dashed'}
+        ${isLoading ? 'opacity-50 cursor-not-allowed grayscale' : 'cursor-pointer hover:bg-[#FDFBF7]'}
+        shadow-[8px_8px_0px_0px_rgba(0,0,0,0.1)] hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]
       `}
       onDragEnter={handleDrag}
       onDragLeave={handleDrag}
@@ -81,23 +78,30 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageSelected, i
         disabled={isLoading}
       />
 
-      <div className="bg-slate-800 p-4 rounded-full mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+      {/* Geometric Decorative Elements */}
+      <div className="absolute top-4 left-4 w-3 h-3 bg-black"></div>
+      <div className="absolute top-4 right-4 w-3 h-3 bg-black rounded-full"></div>
+      <div className="absolute bottom-4 left-4 w-0 h-0 border-l-[6px] border-l-transparent border-b-[12px] border-b-black border-r-[6px] border-r-transparent"></div>
+      <div className="absolute bottom-4 right-4 w-3 h-3 border-2 border-black"></div>
+
+
+      <div className={`p-6 mb-6 border-4 border-black rounded-full transition-transform duration-200 group-hover:scale-110 ${dragActive ? 'bg-white' : 'bg-[#F0C020]'}`}>
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={3} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
         </svg>
       </div>
 
-      <h3 className="text-xl font-semibold text-white mb-2">Upload your Image</h3>
-      <p className="text-slate-400 text-center mb-6">
-        Drag & drop or click to select<br/>
-        <span className="text-xs text-slate-500">(JPG, PNG support)</span>
+      <h3 className="text-2xl font-black text-black mb-2 uppercase tracking-wide">Image Input</h3>
+      <p className="text-neutral-600 text-center mb-8 font-medium">
+        Drop file here<br/>
+        <span className="text-xs text-neutral-400 font-mono border border-neutral-300 px-2 mt-1 inline-block bg-white">JPG / PNG</span>
       </p>
 
       <button
-        className={`px-6 py-2 rounded-full font-medium text-sm transition-colors ${
+        className={`px-8 py-3 font-bold text-sm transition-all border-4 border-black uppercase tracking-widest ${
             isLoading 
-            ? 'bg-slate-700 text-slate-400' 
-            : 'bg-indigo-600 text-white hover:bg-indigo-500 shadow-lg shadow-indigo-500/20'
+            ? 'bg-neutral-200 text-neutral-400 border-neutral-400' 
+            : 'bg-[#D02020] text-white hover:bg-[#b01010] hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]'
         }`}
         disabled={isLoading}
       >

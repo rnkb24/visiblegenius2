@@ -18,6 +18,13 @@ export interface WindowAI {
   }
 }
 
+export interface StylePreset {
+  id: string;
+  label: string;
+  description: string;
+  prompt: string;
+}
+
 declare global {
   interface Window extends WindowAI {}
 }
