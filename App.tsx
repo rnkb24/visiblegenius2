@@ -11,6 +11,7 @@ const App: React.FC = () => {
   const [status, setStatus] = useState<AppStatus>(AppStatus.IDLE);
   const [images, setImages] = useState<GeneratedImage | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [detectedRatio, setDetectedRatio] = useState<string>("1:1");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [apiKeyReady, setApiKeyReady] = useState(false);
   const [selectedStyle, setSelectedStyle] = useState<StylePreset>(STYLE_PRESETS[0]);
@@ -19,13 +20,33 @@ const App: React.FC = () => {
     return dataUrl.split(',')[1] || dataUrl;
   };
 
-  const processImage = useCallback(async (base64Input: string) => {
+  /**
+   * Detects the closest supported Gemini aspect ratio based on pixel dimensions
+   */
+  const detectAspectRatio = (base64: string): Promise<string> => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        const ratio = img.width / img.height;
+        
+        // Gemini Supported Enums: 1:1, 4:3, 3:4, 16:9, 9:16
+        if (ratio > 1.5) resolve("16:9");
+        else if (ratio > 1.1) resolve("4:3");
+        else if (ratio < 0.6) resolve("9:16");
+        else if (ratio < 0.9) resolve("3:4");
+        else resolve("1:1");
+      };
+      img.src = base64;
+    });
+  };
+
+  const processImage = useCallback(async (base64Input: string, ratio: string) => {
     setStatus(AppStatus.PROCESSING);
     setErrorMsg(null);
 
     try {
       const cleanInput = cleanBase64(base64Input);
-      const processedImage = await generateTransmutedImage(cleanInput, selectedStyle.prompt);
+      const processedImage = await generateTransmutedImage(cleanInput, selectedStyle.prompt, ratio);
 
       setImages({
         original: base64Input,
@@ -39,14 +60,16 @@ const App: React.FC = () => {
     }
   }, [selectedStyle]);
 
-  const handleImageSelect = useCallback((base64: string) => {
+  const handleImageSelect = useCallback(async (base64: string) => {
     setPreviewImage(base64);
+    const ratio = await detectAspectRatio(base64);
+    setDetectedRatio(ratio);
     setStatus(AppStatus.IDLE);
   }, []);
 
   const handleStartProcessing = () => {
     if (previewImage) {
-        processImage(previewImage);
+        processImage(previewImage, detectedRatio);
     }
   };
 
@@ -70,7 +93,6 @@ const App: React.FC = () => {
     if (!images?.processed) return;
 
     const img = new Image();
-    
     img.onload = () => {
       const canvas = document.createElement('canvas');
       canvas.width = img.width;
@@ -95,7 +117,6 @@ const App: React.FC = () => {
         }
       }
     };
-
     img.src = images.processed;
   }, [images, selectedStyle]);
 
@@ -183,7 +204,7 @@ const App: React.FC = () => {
                                 </ul>
                             </div>
                             <div className="mt-2 text-[10px] font-mono text-neutral-400 uppercase tracking-tighter">
-                                // System will render at 2048px resolution
+                                // System detected ratio sync enabled
                             </div>
                         </div>
                     </div>
@@ -196,6 +217,7 @@ const App: React.FC = () => {
                             <div className="text-xs font-mono font-bold uppercase mb-2 border-b-2 border-black pb-1">Input Source</div>
                             <div className="relative group w-full bg-neutral-100 border-2 border-black p-4 flex-grow flex items-center justify-center min-h-[250px]">
                                 <img src={previewImage} alt="Preview" className="max-h-[300px] md:max-h-[400px] w-auto object-contain" />
+                                <div className="absolute bottom-6 left-6 bg-black text-white px-2 py-1 text-[10px] font-mono font-bold">DETECTED RATIO: {detectedRatio}</div>
                                 <button onClick={handleClearPreview} className="absolute top-4 right-4 bg-white border-2 border-black p-2 hover:bg-[#D02020] hover:text-white transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={3} d="M6 18L18 6M6 6l12 12" /></svg>
                                 </button>
@@ -224,7 +246,7 @@ const App: React.FC = () => {
                                 </div>
                             </div>
                             <div className="pt-4 border-t-4 border-black border-dotted">
-                                <button onClick={handleStartProcessing} className="w-full group relative flex items-center justify-center px-6 py-4 font-black text-white text-lg md:text-xl uppercase tracking-wider bg-[#1040A0] border-4 border-black hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:translate-y-0 active:shadow-none">
+                                <button onClick={handleStartProcessing} className="w-full group relative flex items-center justify-center px-6 py-4 font-black text-white text-lg md:text-xl uppercase tracking-wider bg-[#1040A0] border-4 border-black hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:translate-y-0 active:shadow-none transition-all">
                                     <span>Initiate Transmutation</span>
                                 </button>
                             </div>
@@ -240,7 +262,10 @@ const App: React.FC = () => {
                      </div>
                      <div className="text-center space-y-4 px-6">
                         <h3 className="text-3xl md:text-4xl font-black text-black uppercase">Constructing</h3>
-                        <div className="inline-block bg-[#F0C020] px-4 py-1 border-2 border-black font-mono font-bold text-xs">PROTOCOL: {selectedStyle.label}</div>
+                        <div className="flex flex-col gap-2 items-center">
+                            <div className="inline-block bg-[#F0C020] px-4 py-1 border-2 border-black font-mono font-bold text-xs uppercase">PROTOCOL: {selectedStyle.label}</div>
+                            <div className="inline-block bg-white px-4 py-1 border-2 border-black font-mono font-bold text-xs uppercase">RATIO: {detectedRatio}</div>
+                        </div>
                      </div>
                   </div>
                 )}
@@ -277,13 +302,15 @@ const App: React.FC = () => {
                          Reset System
                        </button>
                     </div>
-                    <div className="text-center text-neutral-500 text-[10px] font-mono uppercase tracking-widest max-w-lg mx-auto bg-white px-4 py-2 border border-black">Status: 2K Rendering Complete.</div>
+                    <div className="text-center text-neutral-500 text-[10px] font-mono uppercase tracking-widest max-w-lg mx-auto bg-white px-4 py-2 border border-black">
+                        Status: Rendering Complete ({detectedRatio} @ 1K).
+                    </div>
                   </div>
                 )}
               </main>
               
               <footer className="w-full py-8 text-center text-black font-bold uppercase tracking-widest text-[10px] border-t-4 border-black bg-white">
-                <p>ENGINEERED BY RON RADOM</p>
+                <p>ENGINEERED BY RON RADOM // VISIBLE GENIUS v0.4</p>
               </footer>
             </div>
           )}
